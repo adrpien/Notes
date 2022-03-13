@@ -18,10 +18,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        // Handling FloatButton click
         binding.addNoteFloatButton.setOnClickListener {
             val intent = Intent(applicationContext, AddNoteActivity::class.java)
             startActivity(intent)
-
         }
 
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         // Creating DataBase
         val notesDataBaseHelper = NotesDataBaseHelper(applicationContext)
         val dataBase = notesDataBaseHelper.writableDatabase
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = binding.notesRecyclerView
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
         recyclerView.adapter = NotesAdapter(applicationContext, dataBase)
+
 
     }
 }

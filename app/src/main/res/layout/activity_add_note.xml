@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".AddNoteActivity">
 
-    <TextView
+    <EditText
         android:id="@+id/addTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,21 +16,19 @@
         app:layout_constraintStart_toStartOf="@+id/addDescriptionTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/addDescriptionTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:editable="true"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/addNoteButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addTitleTextView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/addNoteButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Button"
