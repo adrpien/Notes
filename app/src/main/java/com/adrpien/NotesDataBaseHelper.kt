@@ -26,7 +26,8 @@ object NotesComands {
 
 
 // SQLiteHelper implementation
-class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context, NotesDataBaseInfo.TABLE_NAME, null, 1) {
+class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context,
+    NotesDataBaseInfo.TABLE_NAME, null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(NotesComands.SQL_CREATE_COMMAND)
     }

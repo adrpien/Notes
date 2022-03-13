@@ -1,15 +1,13 @@
 package com.adrpien
 
 import android.content.ContentValues
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.BaseColumns
-import android.provider.ContactsContract
-import android.text.Editable
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.adrpien.databinding.ActivityAddNoteBinding
-import com.adrpien.databinding.ActivityMainBinding
 
 // Edit/add note activity
 class AddNoteActivity : AppCompatActivity() {
@@ -22,47 +20,59 @@ class AddNoteActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Filling addTitleTextView and addDescriptionTextView from intent extras
-        if(intent.hasExtra(NotesDataBaseInfo.TABLE_COLUMN_TITLE)){
+        if (intent.hasExtra(NotesDataBaseInfo.TABLE_COLUMN_TITLE)) {
             binding.addTitleTextView.setText(intent.getStringExtra(NotesDataBaseInfo.TABLE_COLUMN_TITLE))
         }
-        if(intent.hasExtra(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION)){
+        if (intent.hasExtra(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION)) {
             binding.addDescriptionTextView.setText(intent.getStringExtra(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION))
         }
+    }
 
+    // Adding ActionBarMenu to Activity
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.add_note_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        // Creating writableDatabase
-        val notesDataBaseHelper = NotesDataBaseHelper(binding.root.context)
-        val dataBase = notesDataBaseHelper.writableDatabase
+    // Handling menu item click
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        binding.addNoteButton.setOnClickListener {
+        if (item.itemId == R.id.saveButton){
 
             val title = binding.addTitleTextView.text.toString()
             val description = binding.addDescriptionTextView.text.toString()
 
             if((title.isEmpty() && description.isEmpty())){
-                    Toast.makeText(applicationContext, "Pusta notatka! Nie zapisano!", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Pusta notatka! Nie zapisano!", Toast.LENGTH_SHORT)
+            } else {
+
+                // Creating ContentValues for database
+                val contentValues = ContentValues()
+                contentValues.put(NotesDataBaseInfo.TABLE_COLUMN_TITLE, title)
+                contentValues.put(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION, description)
+
+                val dataBaseHelper = NotesDataBaseHelper(binding.root.context)
+                val dataBase = dataBaseHelper.writableDatabase
+
+                // Saving/editing note
+                if(!intent.hasExtra(BaseColumns._ID)){
+                    dataBase.insert(
+                        NotesDataBaseInfo.TABLE_NAME,
+                        null,
+                        contentValues)
+                    Toast.makeText(applicationContext, "Dodano nową notatkę", Toast.LENGTH_SHORT).show()
                 } else {
-
-                    // Creating ContentValues for database
-                    val contentValues = ContentValues()
-                    contentValues.put(NotesDataBaseInfo.TABLE_COLUMN_TITLE, title)
-                    contentValues.put(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION, description)
-
-                    // Saving/editing note
-                    if(!intent.hasExtra(BaseColumns._ID)){
-                        dataBase.insert(NotesDataBaseInfo.TABLE_NAME, null, contentValues)
-                        Toast.makeText(applicationContext, "Dodano nową notatkę", Toast.LENGTH_SHORT).show()
-                    } else {
-                        dataBase.update(
-                            NotesDataBaseInfo.TABLE_NAME,
-                            contentValues,
-                            BaseColumns._ID + "=?",
-                            arrayOf(intent.getStringExtra(BaseColumns._ID)))
-                        Toast.makeText(applicationContext, "Edytowano notatkę", Toast.LENGTH_SHORT).show()
-                    }
+                    dataBase.update(
+                        NotesDataBaseInfo.TABLE_NAME,
+                        contentValues,
+                        BaseColumns._ID + "=?",
+                        arrayOf(intent.getStringExtra(BaseColumns._ID)))
+                    Toast.makeText(applicationContext, "Edytowano notatkę", Toast.LENGTH_SHORT).show()
                 }
+                dataBase.close()
+                onBackPressed()
             }
-
-
         }
+        return super.onOptionsItemSelected(item)
     }
+}

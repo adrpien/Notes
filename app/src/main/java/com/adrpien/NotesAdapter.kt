@@ -4,20 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 
 
-
 // RecyclerView Adapter implementation
-class NotesAdapter(val context: Context, val db: SQLiteDatabase): RecyclerView.Adapter<NotesHolder>() {
+class NotesAdapter(val context: Context, val db: SQLiteDatabase, val notes: ArrayList<Note>): RecyclerView.Adapter<NotesHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -32,41 +28,46 @@ class NotesAdapter(val context: Context, val db: SQLiteDatabase): RecyclerView.A
         val noteCardView: CardView = holder.view.findViewById<CardView>(R.id.noteCardView)
         val title: TextView = holder.view.findViewById<TextView>(R.id.titleTextView)
         val description: TextView = holder.view.findViewById<TextView>(R.id.descriptionTextView)
-        val titleArray: ArrayList<String> = arrayListOf()
-        val descriptionArray: ArrayList<String> = arrayListOf()
 
-        // Fun query returns object Cursor. We can compare cursor to array of results od your query.
-        val cursor = db.query(NotesDataBaseInfo.TABLE_NAME,
-            null,
-            BaseColumns._ID + "=?",
-            arrayOf(holder.adapterPosition.plus(1).toString()),
-            null,
-            null,
-            null)
+        title.setText(notes[holder.adapterPosition].title)
+        description.setText(notes[holder.adapterPosition].description)
 
-        // Check if cursor is not empty
-        if(cursor.moveToFirst()) {
-            if(!(cursor.getString(1).isNullOrEmpty() || cursor.getString(2).isNullOrEmpty())){
-                title.text = cursor.getString(1)
-                description.text = cursor.getString(2)
-                // titleArray[cursor.position.minus(1)] = title.text.toString()
-                // descriptionArray[cursor.position.minus(1)] = description.text.toString()
-            }
-        }
-        cursor.close() // Closing cursor
-
+        // Edit when noteCardView clicked
         noteCardView.setOnClickListener {
             val intent = Intent(it.context, AddNoteActivity::class.java)
-            intent.putExtra(NotesDataBaseInfo.TABLE_COLUMN_TITLE, title.text.toString())
-            intent.putExtra(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION, description.text.toString())
-            intent.putExtra(BaseColumns._ID, holder.adapterPosition.plus(1).toString())
+            intent.putExtra(NotesDataBaseInfo.TABLE_COLUMN_TITLE, notes[holder.adapterPosition].title)
+            intent.putExtra(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION, notes[holder.adapterPosition].description)
+            intent.putExtra(BaseColumns._ID, notes[holder.adapterPosition].id.toString())
             it.context.startActivity(intent)
         }
+
+        noteCardView.setOnLongClickListener(object: View.OnLongClickListener{
+            override fun onLongClick(p0: View?): Boolean {
+
+                /*//Handling ClipboardManager
+                var cm = context.getSystemService(Service.CLIPBOARD_SERVICE) as ClipboardManager
+                var cd = ClipData.newPlainText("Copy text", "Text : ${notes[holder.adapterPosition].title}" +
+                                                "Description : ${notes[holder.adapterPosition].description}")
+                cm.setPrimaryClip(cd)*/
+
+
+                // Removing note
+                val delete = db.delete(
+                    NotesDataBaseInfo.TABLE_NAME,
+                    BaseColumns._ID + "=?",
+                    arrayOf(notes[holder.adapterPosition].id.toString())
+                )
+                notes.removeAt(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+                return true
+            }
+        })
     }
 
     override fun getItemCount(): Int {
 
-        val cursor = db.query(NotesDataBaseInfo.TABLE_NAME,
+        val cursor = db.query(
+            NotesDataBaseInfo.TABLE_NAME,
             null,
             null,
             null,
