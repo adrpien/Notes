@@ -37,13 +37,14 @@ class AddNoteActivity : AppCompatActivity() {
     // Handling menu item click
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+        // Use "when" if you have more menu items
         if (item.itemId == R.id.saveButton){
-
+            // Saving title and description values from TextView
             val title = binding.addTitleTextView.text.toString()
             val description = binding.addDescriptionTextView.text.toString()
 
             if((title.isEmpty() && description.isEmpty())){
-                Toast.makeText(applicationContext, "Pusta notatka! Nie zapisano!", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Pusta notatka! Nie zapisano!", Toast.LENGTH_SHORT).show()
             } else {
 
                 // Creating ContentValues for database
@@ -69,7 +70,9 @@ class AddNoteActivity : AppCompatActivity() {
                         arrayOf(intent.getStringExtra(BaseColumns._ID)))
                     Toast.makeText(applicationContext, "Edytowano notatkę", Toast.LENGTH_SHORT).show()
                 }
+                // Closing is not required, sometimes even not beneficial for optimalization
                 dataBase.close()
+                // Backing to main activity
                 onBackPressed()
             }
         }

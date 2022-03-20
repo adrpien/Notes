@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val notesDataBaseHelper = NotesDataBaseHelper(applicationContext)
         val dataBase = notesDataBaseHelper.writableDatabase
 
+        // Getting cursor with all notes
         val cursor = dataBase.query(
             NotesDataBaseInfo.TABLE_NAME,
             null,
@@ -55,10 +56,13 @@ class MainActivity : AppCompatActivity() {
                 cursor.moveToNext()
             }
         }
+        cursor.close()
 
         // Creating Recycler View
         val recyclerView = binding.notesRecyclerView
+        // Setting layoutManager
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
+        //Setting adapter
         recyclerView.adapter = NotesAdapter(applicationContext, dataBase, notesArray)
 
 

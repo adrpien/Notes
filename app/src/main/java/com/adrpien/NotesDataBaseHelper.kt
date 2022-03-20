@@ -5,14 +5,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 
-
 // Table info
 object NotesDataBaseInfo: BaseColumns{
     const val TABLE_NAME: String = "Notes"
     const val TABLE_COLUMN_TITLE: String = "Title"
     const val TABLE_COLUMN_DESCRIPTION: String = "Description"
 }
-
 
 // Table Commands
 object NotesComands {
@@ -23,7 +21,6 @@ object NotesComands {
 
     const val  SQL_DELETE = "DROP TABLE IF EXISTS ${NotesDataBaseInfo.TABLE_NAME}"
 }
-
 
 // SQLiteHelper implementation
 class NotesDataBaseHelper(context: Context): SQLiteOpenHelper(context,

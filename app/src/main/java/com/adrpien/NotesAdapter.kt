@@ -25,15 +25,17 @@ class NotesAdapter(val context: Context, val db: SQLiteDatabase, val notes: Arra
     override fun onBindViewHolder(holder: NotesHolder, position: Int) {
 
         // Why I had to use findViewById??
-        val noteCardView: CardView = holder.view.findViewById<CardView>(R.id.noteCardView)
-        val title: TextView = holder.view.findViewById<TextView>(R.id.titleTextView)
-        val description: TextView = holder.view.findViewById<TextView>(R.id.descriptionTextView)
+        val noteCardView: CardView = holder.view.findViewById(R.id.noteCardView)
+        val title: TextView = holder.view.findViewById(R.id.titleTextView)
+        val description: TextView = holder.view.findViewById(R.id.descriptionTextView)
 
         title.setText(notes[holder.adapterPosition].title)
         description.setText(notes[holder.adapterPosition].description)
 
         // Edit when noteCardView clicked
         noteCardView.setOnClickListener {
+
+            // Opening Edit Activity
             val intent = Intent(it.context, AddNoteActivity::class.java)
             intent.putExtra(NotesDataBaseInfo.TABLE_COLUMN_TITLE, notes[holder.adapterPosition].title)
             intent.putExtra(NotesDataBaseInfo.TABLE_COLUMN_DESCRIPTION, notes[holder.adapterPosition].description)
@@ -44,15 +46,16 @@ class NotesAdapter(val context: Context, val db: SQLiteDatabase, val notes: Arra
         noteCardView.setOnLongClickListener(object: View.OnLongClickListener{
             override fun onLongClick(p0: View?): Boolean {
 
-                /*//Handling ClipboardManager
+                /*
+                //Handling ClipboardManager
                 var cm = context.getSystemService(Service.CLIPBOARD_SERVICE) as ClipboardManager
                 var cd = ClipData.newPlainText("Copy text", "Text : ${notes[holder.adapterPosition].title}" +
-                                                "Description : ${notes[holder.adapterPosition].description}")
-                cm.setPrimaryClip(cd)*/
-
+                    "Description : ${notes[holder.adapterPosition].description}")
+                cm.setPrimaryClip(cd)
+                */
 
                 // Removing note
-                val delete = db.delete(
+                db.delete(
                     NotesDataBaseInfo.TABLE_NAME,
                     BaseColumns._ID + "=?",
                     arrayOf(notes[holder.adapterPosition].id.toString())
@@ -75,6 +78,7 @@ class NotesAdapter(val context: Context, val db: SQLiteDatabase, val notes: Arra
             null,
             null)
         val cursorCount: Int = cursor.count
+        // Cursor Closing
         cursor.close()
         return  cursorCount
     }
