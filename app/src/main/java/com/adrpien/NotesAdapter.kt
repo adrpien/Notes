@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 // RecyclerView Adapter implementation
-class NotesAdapter(val context: Context, val db: SQLiteDatabase, val notes: ArrayList<Note>): RecyclerView.Adapter<NotesHolder>() {
+class NotesAdapter(val context: Context, val db: SQLiteDatabase, val notes: ArrayList<TextNote>): RecyclerView.Adapter<NotesHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

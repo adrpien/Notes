@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -11,28 +12,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
     <com.adrpien.GraphicNoteView
+        android:id="@+id/graphicNoteView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="184dp"
         android:background="#6C6262"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notesRecyclerView"
-        app:layout_constraintVertical_bias="0.104"
-        tools:layout_editor_absoluteX="110dp" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNoteFloatButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:clickable="true"
+        android:contentDescription="@string/add_note_float_button"
         android:focusable="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/add_note_float_button"
         app:srcCompat="@drawable/ic_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addSoundNoteFloatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/addGraphicNoteFloatButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addGraphicNoteFloatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/addTextNoteFloatButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addTextNoteFloatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginEnd="244dp"
+        android:layout_marginBottom="224dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/addNoteFloatButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
